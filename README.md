@@ -28,40 +28,20 @@ Por defecto se incluyen pantallas a las cuales se le puede modificar el color y 
 Alternativamente se puede integrar con pantallas personalizadas, para más información: [https://console.bluemix.net/docs/services/appid/branded.html#branding](https://console.bluemix.net/docs/services/appid/branded.html#branding)
 
 ## SDKs
-AppID incluye varios SDKs para la fácil integración con distintos lenguajes: [https://console.bluemix.net/docs/services/appid/install.html#configuring](https://console.bluemix.net/docs/services/appid/install.html#configuring)
+AppID incluye SDKs para la fácil integración con distintos lenguajes: [https://console.bluemix.net/docs/services/appid/install.html#configuring](https://console.bluemix.net/docs/services/appid/install.html#configuring)
 
 ## ¿Como asegurar una API con el SDK para NodeJS?
 La manera recomendada es siguiendo el flujo del implicit grant de OAuth aunque todo depende del caso de uso.  
 Para esto se utiliza una estrategia de [Passport.js](http://www.passportjs.org/) proporcionada por AppID llamada *APIStrategy*    
 
-### Acceso a un recurso protegido
-Para poder acceder al recurso es necesario haber iniciado sesión y obtenido un *access token* que debe ser enviado en cada petición.
-```javascript
-  var express = require('express');
-  var passport = require('passport');
-  var APIStrategy = require('ibmcloud-appid').APIStrategy;
-
-  passport.use(new APIStrategy());
-  var app = express();
-  app.use(passport.initialize());
-
-  app.get('/protected', passport.authenticate('APIStrategy.STRATEGY_NAME', {session: false }),
-      function(request, response){
-          console.log("Securty context", request.securityContext)    
-          response.send(200, "Success!");
-      }
-  );
-
-  app.listen(process.env.PORT);
-```
-  
-
 ## ¿Como asegurar una aplicación web con el SDK para NodeJS?
 Para una aplicación web se sugiere utilizar el grant de OAuth llamado *authorization code grant*. Para eso se utiliza una estrategia de Passport.js llamada *WebAppStrategy* que va a mostrar la pantalla de login necesaria en caso de que el usuario no este autenticado.
 
-### Acceso a un recurso protegido
-En el siguiente código se puede ver como dependiendo si el usuario inició sesión o no se van llamando diferentes funciones y middlewares de Express.js. El token de acceso se guarda como parte de la sesión.
+### Acceso a una aplicación web protegida
+En el siguiente código se puede ver como dependiendo si el usuario inició sesión o no se van llamando diferentes funciones y middlewares de Express.js. El siguiente código fue tomado del ejemplo `Getting started` y no está completo. El token de acceso se guarda como parte de la sesión.
 ```javascript
+...
+
 // Protected area. If current user is not authenticated - redirect to the login widget will be returned.
 // In case user is authenticated - a page with current user information will be returned.
 app.get("/protected", function tryToRefreshTokensIfNotLoggedIn(req, res, next) {
@@ -100,7 +80,83 @@ webAppStrategy.refreshTokens(req, req.cookies.refreshToken).finally(function() {
 		next(e);
 	});
 });
+
+...
+
 ```
+
+## Tutorial: Creando una API y protegiendo su acceso paso a paso
+En el siguiente tutorial se va a crear una API que expone información que no debe ser revelada a personas sin autorización. Por esta razón la queremos proteger utilizando AppID. Se va a crear un servididor (backend) que expone la API rest y un cliente que la consuma.
+
+### Proyecto e instalacion de las dependencias
+#### 1. Crear un proyecto utilizando npm init 
+```
+npm init
+```
+#### 2. Instalar las dependencias  
+```
+npm install --save express
+npm install --save passport
+npm install --save ibmcloud-appid
+```
+#### 3. Importar los modulos necesarios y configurar express
+```javascript
+//Dependencias necesarias
+const express = require('express');
+const passport = require('passport');
+const APIStrategy = require("ibmcloud-appid").APIStrategy;
+
+const app = express();
+//Hacemos que express use el middleware de Passport.js
+app.use(passport.initialize());
+
+/* Si la aplicación esta asociada a AppID a travéz de IBM Cloud (como en Cloud Foundry) estos datos
+ * se obtienen de la variable de entorno VCAP_SERVICES de manera automatica */
+
+//Estos son los datos de la instancia de AppID que obtenemos desde el dashboard de AppID en la sección: View credentials
+passport.use(new APIStrategy({
+	oauthServerUrl: "{oauth-server-url}",
+	tenantId: "{tenant-id}",
+	clientId: "{client-id}"
+}));
+
+...
+
+```
+#### 4. Creamos la API
+Para poder acceder al recurso es necesario haber iniciado sesión previamente y obtenido un *access token* que debe ser enviado en el Header cada petición a la API de la siguiente forma `Authorization=Bearer {access_token} [{id_token}]`. En caso de no haber proporcionado el token o que esté expirado no se procede en la petición y devuelve `Www-Authenticate=Bearer scope="{scope}" error="{error}"` siendo `error` opcional.
+```javascript
+...
+
+//API
+app.get("/api/protected",
+
+	passport.authenticate(APIStrategy.STRATEGY_NAME, {
+		session: false
+    }),
+    
+	function(req, res) {
+		//Contiene propiedades para acceder al access token y el identity token
+		var appIdAuthContext = req.appIdAuthorizationContext;
+
+	        console.log(appIdAuthContext.identityTokenPayload); // identity_token JSON decodifcado
+
+		//Tambien se puede usar el objeto provisto por Passport.js
+		var username = req.user.name || "Anónimo";
+		res.send("Hello desde un recurso protegido " + username);
+	}
+);
+
+var port = 8080;
+
+//Escuchar en un puerto por peticiones
+app.listen(port, function(){
+	logger.info("Send GET request to http://localhost:" + port + "/api/protected");
+});
+
+```
+
+
 
 ## Adaptando AppID a tu caso de uso
 Para ver más en profundidad como adaptar App ID a tu caso de uso es recomendable seguir el tutorial de iniciación. Una vez creada la instancia de AppID en IBM Cloud puedes ir a la opción en el panel de control: *Overview > Getting started* y descargar la aplicación de ejemplo. Tiene todo lo necesario para entender el flujo de asegurar una aplicación web. Para una API es recomendable entender bien el *implicit grant flow* de OAuth.
