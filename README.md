@@ -18,14 +18,15 @@ AppID se puede conectar con los siguientes proveedores
 3. SAML 2.0 (Para conectarse a un proveedor de identidad corporativo)
 4. Cloud Directory: Permite alojar los usuarios en la instancia de AppID
 
+## SDKs
+AppID incluye SDKs para la fácil integración con distintos lenguajes: [https://console.bluemix.net/docs/services/appid/install.html#configuring](https://console.bluemix.net/docs/services/appid/install.html#configuring)
 
-## ¿Como asegurar una API con el SDK para NodeJS?
+## ¿Como asegurar una API?
 La manera recomendada es siguiendo el flujo del implicit grant de OAuth aunque todo depende del caso de uso.  
-Para esto se utiliza una estrategia de [Passport.js](http://www.passportjs.org/) proporcionada por AppID llamada *APIStrategy*    
+Para esto se utiliza una estrategia de [Passport.js](http://www.passportjs.org/) proporcionada por AppID llamada *APIStrategy* en el caso del SDK de NodeJS.   
 
-## ¿Como asegurar una aplicación web con el SDK para NodeJS?
-Para una aplicación web se sugiere utilizar el grant de OAuth llamado *authorization code grant*. Para eso se utiliza una estrategia de Passport.js llamada *WebAppStrategy* que va a mostrar la pantalla de login necesaria en caso de que el usuario no este autenticado.
-
+## ¿Como asegurar una aplicación web?
+Para una aplicación web se sugiere utilizar el grant de OAuth llamado *authorization code grant*. Para esto, utilizando el SDK para NodeJS, se utiliza una estrategia de Passport.js llamada *WebAppStrategy* que va a mostrar la pantalla de login necesaria en caso de que el usuario no este autenticado.
 
 ## Personalización
 Cuanto se utiliza para proteger una aplicación web con `WebAppStrategy`, por defecto se incluyen pantallas a las cuales se le puede modificar el color y el logo de la empresa, de esta manera es posible rápidamente asegurar aplicaciones y usar el servicio. Las siguientes pantallas están incluidas:  
@@ -35,9 +36,6 @@ Cuanto se utiliza para proteger una aplicación web con `WebAppStrategy`, por de
 4. Re envio de email de verificación  
 
 Alternativamente se puede integrar con pantallas personalizadas, para más información: [https://console.bluemix.net/docs/services/appid/branded.html#branding](https://console.bluemix.net/docs/services/appid/branded.html#branding)
-
-## SDKs
-AppID incluye SDKs para la fácil integración con distintos lenguajes: [https://console.bluemix.net/docs/services/appid/install.html#configuring](https://console.bluemix.net/docs/services/appid/install.html#configuring)
 
 ### Ejemplo de acceso a una aplicación web protegida
 En el siguiente código se puede ver como dependiendo si el usuario inició sesión o no se van llamando diferentes funciones y middlewares de Express.js. El siguiente código fue tomado del ejemplo `Getting started` y no está completo. El token de acceso se guarda como parte de la sesión.
