@@ -86,7 +86,7 @@ webAppStrategy.refreshTokens(req, req.cookies.refreshToken).finally(function() {
 ```
 
 ## Tutorial 1: Creando una API y protegiendo su acceso paso a paso
-En el siguiente tutorial se va a crear una API que expone información que no debe ser revelada a personas sin autorización. Por esta razón la queremos proteger utilizando AppID. Se va a crear un servididor (backend) que expone la API rest y un cliente que la consuma.
+En el siguiente tutorial se va a crear una API que expone información que no debe ser revelada a personas sin autorización. Por esta razón se la quiere proteger utilizando AppID. Se va a crear un servidor (backend) que expone la API rest y un cliente que la consuma.
 
 ### Proyecto e instalacion de las dependencias
 #### 1. Crear un proyecto utilizando npm init 
@@ -157,6 +157,7 @@ app.listen(port, function(){
 ```
 
 ## Tutorial 2: Autenticación y accediendo a API protegida
+
 
 
 ## Adaptando AppID a tu caso de uso
