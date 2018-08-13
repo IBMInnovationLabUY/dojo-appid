@@ -18,6 +18,15 @@ AppID se puede conectar con los siguientes proveedores
 3. SAML 2.0 (Para conectarse a un proveedor de identidad corporativo)
 4. Cloud Directory: Permite alojar los usuarios en la instancia de AppID
 
+
+## ¿Como asegurar una API con el SDK para NodeJS?
+La manera recomendada es siguiendo el flujo del implicit grant de OAuth aunque todo depende del caso de uso.  
+Para esto se utiliza una estrategia de [Passport.js](http://www.passportjs.org/) proporcionada por AppID llamada *APIStrategy*    
+
+## ¿Como asegurar una aplicación web con el SDK para NodeJS?
+Para una aplicación web se sugiere utilizar el grant de OAuth llamado *authorization code grant*. Para eso se utiliza una estrategia de Passport.js llamada *WebAppStrategy* que va a mostrar la pantalla de login necesaria en caso de que el usuario no este autenticado.
+
+
 ## Personalización
 Cuanto se utiliza para proteger una aplicación web con `WebAppStrategy`, por defecto se incluyen pantallas a las cuales se le puede modificar el color y el logo de la empresa, de esta manera es posible rápidamente asegurar aplicaciones y usar el servicio. Las siguientes pantallas están incluidas:  
 1. Login
@@ -30,14 +39,7 @@ Alternativamente se puede integrar con pantallas personalizadas, para más infor
 ## SDKs
 AppID incluye SDKs para la fácil integración con distintos lenguajes: [https://console.bluemix.net/docs/services/appid/install.html#configuring](https://console.bluemix.net/docs/services/appid/install.html#configuring)
 
-## ¿Como asegurar una API con el SDK para NodeJS?
-La manera recomendada es siguiendo el flujo del implicit grant de OAuth aunque todo depende del caso de uso.  
-Para esto se utiliza una estrategia de [Passport.js](http://www.passportjs.org/) proporcionada por AppID llamada *APIStrategy*    
-
-## ¿Como asegurar una aplicación web con el SDK para NodeJS?
-Para una aplicación web se sugiere utilizar el grant de OAuth llamado *authorization code grant*. Para eso se utiliza una estrategia de Passport.js llamada *WebAppStrategy* que va a mostrar la pantalla de login necesaria en caso de que el usuario no este autenticado.
-
-### Acceso a una aplicación web protegida
+### Ejemplo de acceso a una aplicación web protegida
 En el siguiente código se puede ver como dependiendo si el usuario inició sesión o no se van llamando diferentes funciones y middlewares de Express.js. El siguiente código fue tomado del ejemplo `Getting started` y no está completo. El token de acceso se guarda como parte de la sesión.
 ```javascript
 ...
@@ -164,6 +166,7 @@ Para ver más en profundidad como adaptar App ID a tu caso de uso es recomendabl
 
 Para más información: https://console.bluemix.net/docs/services/appid/index.html#sample-app
 
-## Documentación
-Para profundizar más en AppID puedes dirigirte a la documentación: 
+## Documentación y Referencias
+Para profundizar más en AppID puedes dirigirte a las siguientes fuentes: 
 https://console.bluemix.net/docs/services/appid/index.html
+https://github.com/ibm-cloud-security/appid-serversdk-nodejs/blob/master/README.md
