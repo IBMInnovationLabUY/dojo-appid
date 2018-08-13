@@ -43,5 +43,5 @@ var port = 8080;
 
 //Escuchar en un puerto por peticiones
 app.listen(port, function(){
-	logger.info("Send GET request to http://localhost:" + port + "/api/protected");
+	console.log("Send GET request to http://localhost:" + port + "/api/protected");
 });
