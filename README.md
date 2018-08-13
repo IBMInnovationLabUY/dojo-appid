@@ -19,7 +19,7 @@ AppID se puede conectar con los siguientes proveedores
 4. Cloud Directory: Permite alojar los usuarios en la instancia de AppID
 
 ## Personalización
-Por defecto se incluyen pantallas a las cuales se le puede modificar el color y el logo de la empresa, de esta manera es posible rápidamente asegurar aplicaciones y usar el servicio. Las siguientes pantallas están incluidas:  
+Cuanto se utiliza para proteger una aplicación web con `WebAppStrategy`, por defecto se incluyen pantallas a las cuales se le puede modificar el color y el logo de la empresa, de esta manera es posible rápidamente asegurar aplicaciones y usar el servicio. Las siguientes pantallas están incluidas:  
 1. Login
 2. Registro
 3. Cambio de contraseña
@@ -85,7 +85,7 @@ webAppStrategy.refreshTokens(req, req.cookies.refreshToken).finally(function() {
 
 ```
 
-## Tutorial: Creando una API y protegiendo su acceso paso a paso
+## Tutorial 1: Creando una API y protegiendo su acceso paso a paso
 En el siguiente tutorial se va a crear una API que expone información que no debe ser revelada a personas sin autorización. Por esta razón la queremos proteger utilizando AppID. Se va a crear un servididor (backend) que expone la API rest y un cliente que la consuma.
 
 ### Proyecto e instalacion de las dependencias
@@ -156,6 +156,7 @@ app.listen(port, function(){
 
 ```
 
+## Tutorial 2: Autenticación y accediendo a API protegida
 
 
 ## Adaptando AppID a tu caso de uso
