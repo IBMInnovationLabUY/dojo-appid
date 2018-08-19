@@ -156,10 +156,6 @@ app.listen(port, function(){
 
 ```
 
-## Tutorial 2: Autenticación y accediendo a API protegida
-
-
-
 ## Adaptando AppID a tu caso de uso
 Para ver más en profundidad como adaptar App ID a tu caso de uso es recomendable seguir el tutorial de iniciación. Una vez creada la instancia de AppID en IBM Cloud puedes ir a la opción en el panel de control: *Overview > Getting started* y descargar la aplicación de ejemplo. Tiene todo lo necesario para entender el flujo de asegurar una aplicación web. Para una API es recomendable entender bien el *implicit grant flow* de OAuth.
 
