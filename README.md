@@ -123,7 +123,7 @@ passport.use(new APIStrategy({
 ...
 
 ```
-#### 4. Creamos la API
+#### 4. Protegiendo la API
 Para poder acceder al recurso es necesario haber iniciado sesión previamente y obtenido un *access token* que debe ser enviado en el Header cada petición a la API de la siguiente forma `Authorization=Bearer {access_token} [{id_token}]`. En caso de no haber proporcionado el token o que esté expirado no se procede en la petición y devuelve `Www-Authenticate=Bearer scope="{scope}" error="{error}"` siendo `error` opcional.
 ```javascript
 ...
@@ -154,10 +154,35 @@ app.listen(port, function(){
 	logger.info("Send GET request to http://localhost:" + port + "/api/protected");
 });
 
+
+```
+#### 5. Obteniendo un access token
+Para obtener un access token y identity token para el paso anterior puedes crear un endpoint en la API para autenticar a los usuarios utilizando el Username-password flow de OAuth y guardando el resultado de la petición que será un objeto JSON. Para esto será necesario importar (en este ejemplo) axios para realizar la petición y completar `clientId`, `secret` y `oauthServerUrl` con los datos de tu instancia de App ID.
+
+```javascript
+app.post('/login', (req, res, next) => {
+    axios.post('oauthServerUrl', {
+        grant_type: 'password',
+        username: req.body.username,
+        password: req.body.password,
+    }, {
+        auth: {
+            username: 'clientId',
+            password: 'secret'
+        }
+        }
+    ).then((response) => {
+        console.log(response.data);
+        res.json(response.data);
+    }).catch((error) => {
+        console.log(error.response.data);
+        res.json(error.response.data);
+    });
+});
 ```
 
 ## Adaptando AppID a tu caso de uso
-Para ver más en profundidad como adaptar App ID a tu caso de uso es recomendable seguir el tutorial de iniciación. Una vez creada la instancia de AppID en IBM Cloud puedes ir a la opción en el panel de control: *Overview > Getting started* y descargar la aplicación de ejemplo. Tiene todo lo necesario para entender el flujo de asegurar una aplicación web. Para una API es recomendable entender bien el *implicit grant flow* de OAuth.
+Para ver más en profundidad como adaptar App ID a tu caso de uso es recomendable seguir el tutorial de iniciación. Una vez creada la instancia de AppID en IBM Cloud puedes ir a la opción en el panel de control: *Overview > Getting started* y descargar la aplicación de ejemplo. 
 
 Para más información: https://console.bluemix.net/docs/services/appid/index.html#sample-app
 
