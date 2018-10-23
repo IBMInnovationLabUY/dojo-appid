@@ -157,7 +157,7 @@ app.listen(port, function(){
 
 ```
 #### 5. Obteniendo un access token
-Para obtener un access token y identity token para el paso anterior puedes crear un endpoint en la API para autenticar a los usuarios utilizando el Username-password flow de OAuth y guardando el resultado de la petición que será un objeto JSON. Para esto será necesario importar (en este ejemplo) axios para realizar la petición y completar `clientId`, `secret` y `oauthServerUrl` con los datos de tu instancia de App ID.
+Para obtener un access token y identity token para el paso anterior puedes crear un endpoint en la API para autenticar a los usuarios utilizando el Username-password flow de OAuth y guardando el resultado de la petición que será un objeto JSON. Para esto será necesario importar (en este ejemplo) axios para realizar la petición y completar `clientId`, `secret` y `oauthServerUrl` con los datos de tu instancia de App ID. Tener en cuenta que el username-password flow no debe ser usado en una aplicación de producción.
 
 Instalar axios
 ```
